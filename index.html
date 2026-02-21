@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Quiz Maker</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Quiz Maker</h1>
+
+		<section id="builder">
+			<h2>Build Quiz</h2>
+			<form id="qForm">
+				<input id="questionText" placeholder="Question text" required>
+				<div class="opts">
+					<input id="optA" placeholder="Option A" required>
+					<input id="optB" placeholder="Option B" required>
+					<input id="optC" placeholder="Option C">
+					<input id="optD" placeholder="Option D">
+				</div>
+				<label>Correct:</label>
+				<select id="correct">
+					<option value="0">A</option>
+					<option value="1">B</option>
+					<option value="2">C</option>
+					<option value="3">D</option>
+				</select>
+				<div class="row">
+					<button id="addBtn" type="submit">Add Question</button>
+					<button id="clearBtn" type="button">Clear All</button>
+				</div>
+			</form>
+
+			<h3>Questions</h3>
+			<ul id="questionsList" class="list"></ul>
+
+			<button id="startBtn" class="primary">Start Quiz</button>
+		</section>
+
+		<section id="quiz" class="hidden">
+			<h2 id="qIndex"></h2>
+			<div id="qArea" class="card"></div>
+			<ul id="answers" class="list answers"></ul>
+			<div class="row">
+				<button id="prevBtn" class="secondary">Prev</button>
+				<button id="nextBtn" class="primary">Next</button>
+			</div>
+		</section>
+
+		<section id="result" class="hidden">
+			<h2>Results</h2>
+			<div id="score"></div>
+			<button id="retryBtn">Back to Builder</button>
+		</section>
+	</div>
+
+	<script src="app.js"></script>
+</body>
+</html>

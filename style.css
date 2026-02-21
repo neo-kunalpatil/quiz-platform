@@ -1,0 +1,17 @@
+/* Basic styles for Quiz Maker */
+*{box-sizing:border-box;font-family:Segoe UI,Helvetica,Arial,sans-serif}
+body{background:#f6f8fa;color:#222;margin:0;padding:20px}
+.container{max-width:800px;margin:0 auto}
+h1{text-align:center}
+form input, form select{display:block;width:100%;padding:8px;margin:6px 0;border:1px solid #ccc;border-radius:4px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row{display:flex;gap:8px;margin-top:8px}
+.row .primary{background:#2563eb;color:#fff;border:none;padding:8px 12px;border-radius:4px}
+.row .secondary{background:#e5e7eb;border:none;padding:8px 12px;border-radius:4px}
+button{cursor:pointer}
+.list{list-style:none;padding:0;margin:8px 0}
+.list li{background:#fff;padding:10px;border-radius:6px;margin-bottom:6px;border:1px solid #e6e9ee}
+.answers li{margin:6px 0}
+.hidden{display:none}
+.card{background:#fff;padding:16px;border-radius:6px;border:1px solid #e6e9ee}
+#score{font-size:1.2rem;margin:12px 0}
