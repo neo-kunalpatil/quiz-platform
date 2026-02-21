@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Question Bank Manager</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Question Bank Manager</h1>
+
+		<div style="margin-bottom:20px;padding:12px;background:rgba(255,255,255,0.01);border-radius:8px;border:1px solid rgba(255,255,255,0.03)">
+			<label style="display:block;margin-bottom:8px">Select Quiz Bank:</label>
+			<select id="bankSelector" style="width:100%;margin-bottom:10px;">
+				<option value="">-- Select a bank --</option>
+			</select>
+			<div class="row">
+				<input id="searchBox" placeholder="Search questions..." style="flex:1;">
+				<button id="refreshBtn" class="secondary" type="button">Refresh</button>
+			</div>
+		</div>
+
+		<section id="questionManager" class="card">
+			<h2>Questions Overview</h2>
+			<div id="statsBox" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:15px 0;">
+				<div style="padding:10px;background:rgba(76,175,80,0.1);border-radius:4px;text-align:center;">
+					<div style="font-size:1.5em;font-weight:bold;color:#4caf50;" id="totalCount">0</div>
+					<div style="font-size:0.9em;color:#999;">Total Questions</div>
+				</div>
+				<div style="padding:10px;background:rgba(76,175,80,0.1);border-radius:4px;text-align:center;">
+					<div style="font-size:1.5em;font-weight:bold;color:#4caf50;" id="withExplan">0</div>
+					<div style="font-size:0.9em;color:#999;">With Explanation</div>
+				</div>
+			</div>
+
+			<h3>Questions</h3>
+			<ul id="questionTable" class="list" style="max-height:600px;overflow-y:auto;"></ul>
+		</section>
+
+		<div style="margin-top:30px;display:flex;gap:10px;">
+			<button id="exportBankBtn" class="secondary">Export Bank</button>
+			<button id="duplicateBtn" class="secondary">Duplicate Bank</button>
+			<button id="backBtn" class="primary">Back to Builder</button>
+		</div>
+	</div>
+
+	<script src="question-bank.js"></script>
+</body>
+</html>

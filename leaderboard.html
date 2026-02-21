@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Leaderboard</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Quiz Leaderboard</h1>
+
+		<div style="margin-bottom:20px;padding:12px;background:rgba(255,255,255,0.01);border-radius:8px;border:1px solid rgba(255,255,255,0.03)">
+			<label style="display:block;margin-bottom:8px">Filter by Quiz Bank:</label>
+			<select id="bankFilter" style="width:100%;">
+				<option value="">-- All Banks --</option>
+			</select>
+		</div>
+
+		<section id="leaderboardSection" class="card">
+			<h2>Top Scores</h2>
+			<table style="width:100%;border-collapse:collapse;margin-top:20px;">
+				<thead>
+					<tr style="border-bottom:2px solid rgba(255,255,255,0.1);">
+						<th style="padding:10px;text-align:left;">#</th>
+						<th style="padding:10px;text-align:left;">Quiz Bank</th>
+						<th style="padding:10px;text-align:center;">Score</th>
+						<th style="padding:10px;text-align:center;">Percentage</th>
+						<th style="padding:10px;text-align:left;">Date Taken</th>
+					</tr>
+				</thead>
+				<tbody id="leaderboardTable">
+					<tr>
+						<td colspan="5" style="text-align:center;padding:20px;color:#999;">No scores yet</td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+
+		<div style="margin-top:30px;display:flex;gap:10px;">
+			<button id="clearLeaderBtn" class="secondary">Clear Leaderboard</button>
+			<button id="backBtn" class="primary">Back to Builder</button>
+		</div>
+	</div>
+
+	<script src="leaderboard.js"></script>
+</body>
+</html>
