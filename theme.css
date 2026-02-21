@@ -1,0 +1,51 @@
+:root{
+  --bg:#0f172a; /* dark navy */
+  --panel:#0b1220; /* darker panel */
+  --card:#0f172a22; /* translucent */
+  --text:#e6eef8;
+  --muted:#9fb0c9;
+  --primary:#06b6d4; /* teal */
+  --accent:#7c3aed; /* purple */
+  --success:#10b981;
+}
+
+body{
+  background:linear-gradient(180deg,var(--bg) 0%, #071028 100%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+.container{
+  max-width:900px;
+  margin:28px auto;
+  padding:22px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;
+  box-shadow:0 8px 30px rgba(2,6,23,0.6);
+  border:1px solid rgba(255,255,255,0.03);
+}
+h1{color:var(--primary);text-align:left;margin:0 0 12px}
+h2,h3{color:var(--text);margin:6px 0}
+label, small{color:var(--muted)}
+
+form input, form select, textarea{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.06)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:flex;gap:8px;margin-top:10px}
+button{background:transparent;color:var(--text);border-radius:8px;padding:8px 12px;border:1px solid transparent}
+button.primary{background:linear-gradient(90deg,var(--primary),var(--accent));color:#021025;border:none}
+button.secondary{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04)}
+button.secondary:hover, button.primary:hover{transform:translateY(-1px)}
+
+.list li{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);box-shadow:0 4px 14px rgba(2,6,23,0.4)}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.03)}
+
+.answers button{width:100%;text-align:left;padding:10px;border-radius:6px;border:1px solid rgba(255,255,255,0.03)}
+button.chosen{outline:2px solid var(--accent);box-shadow:0 4px 14px rgba(124,58,237,0.12)}
+
+#timer{background:linear-gradient(90deg,#02102522,#02102511);border-left:4px solid var(--accent)}
+#feedback{border-left:4px solid var(--primary);background:linear-gradient(90deg,#02102522,#02102511)}
+
+@media (max-width:700px){
+  .opts{grid-template-columns:1fr}
+  .row{flex-direction:column}
+  .container{padding:14px}
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Quiz Results</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Quiz Results</h1>
+
+		<section id="resultSection" class="card">
+			<div id="scoreDisplay" style="font-size: 2em; margin: 20px 0; text-align: center;">
+				<span id="scoreValue"></span>
+			</div>
+
+			<div id="resultStats" style="margin: 20px 0;">
+				<p><strong>Total Questions:</strong> <span id="totalQuestions">0</span></p>
+				<p><strong>Correct Answers:</strong> <span id="correctAnswers">0</span></p>
+				<p><strong>Percentage:</strong> <span id="percentage">0</span>%</p>
+				<p><strong>Time Taken:</strong> <span id="timeTaken">0</span>s</p>
+			</div>
+
+			<div id="resultBreakdown" style="margin: 20px 0;">
+				<h3>Answer Breakdown</h3>
+				<ul id="answerList" class="list" style="max-height: 400px; overflow-y: auto;"></ul>
+			</div>
+
+			<div class="row" style="margin-top: 30px;">
+				<button id="retryBtn" class="primary">Retry Quiz</button>
+				<button id="backBtn" class="secondary">Back to Builder</button>
+				<button id="downloadBtn" class="secondary">Download Results</button>
+			</div>
+		</section>
+	</div>
+
+	<script src="results.js"></script>
+</body>
+</html>

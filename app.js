@@ -1,4 +1,4 @@
-// Enhanced client-side quiz maker with persistence, import/export, edit/delete, shuffle, timer, feedback
+// Enhanced client-side quiz maker with quiz banks, persistence, import/export, edit/delete, shuffle, timer, feedback
 (function(){
   const qForm = document.getElementById('qForm');
   const questionText = document.getElementById('questionText');
@@ -19,6 +19,11 @@
   const shuffleQuestionsEl = document.getElementById('shuffleQuestions');
   const shuffleOptionsEl = document.getElementById('shuffleOptions');
   const timerSecEl = document.getElementById('timerSec');
+  const bankName = document.getElementById('bankName');
+  const bankSelect = document.getElementById('bankSelect');
+  const newBankBtn = document.getElementById('newBankBtn');
+  const renameBankBtn = document.getElementById('renameBankBtn');
+  const deleteBankBtn = document.getElementById('deleteBankBtn');
 
   const builder = document.getElementById('builder');
   const quiz = document.getElementById('quiz');
@@ -34,20 +39,48 @@
   const timerVal = document.getElementById('timerVal');
   const feedbackEl = document.getElementById('feedback');
 
-  let questions = [];
+  let banks = {}; // { bankId: { name: string, questions: array } }
+  let currentBankId = null;
   let editingIndex = null;
   let playing = null; // deep copy used when playing (may be shuffled)
   let state = { current:0, score:0, answered:false };
   let intervalId = null;
 
-  const STORAGE_KEY = 'quiz-maker-data-v1';
+  const BANKS_STORAGE_KEY = 'quiz-banks-data-v1';
 
   // utilities
   function swap(arr,a,b){ const t=arr[a]; arr[a]=arr[b]; arr[b]=t; }
   function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); swap(arr,i,j); } }
   function deepCopy(obj){ return JSON.parse(JSON.stringify(obj)); }
+  function genId(){ return '_' + Math.random().toString(36).substr(2, 9); }
+  
+  function getQuestions(){
+    if(!currentBankId || !banks[currentBankId]) return [];
+    return banks[currentBankId].questions;
+  }
+
+  function renderBankSelect(){
+    bankSelect.innerHTML = '<option value="">-- Select a bank --</option>';
+    Object.entries(banks).forEach(([id, bank])=>{
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = bank.name;
+      bankSelect.appendChild(opt);
+    });
+    if(currentBankId) bankSelect.value = currentBankId;
+  }
+
+  function switchBank(id){
+    if(!id){ currentBankId = null; renderList(); bankName.value=''; return; }
+    if(!banks[id]) return alert('Bank not found');
+    currentBankId = id;
+    bankName.value = banks[id].name;
+    renderBankSelect();
+    renderList();
+  }
 
   function renderList(){
+    const questions = getQuestions();
     questionsList.innerHTML = '';
     questions.forEach((q,i)=>{
       const li = document.createElement('li');
@@ -71,6 +104,7 @@
   }
 
   function startEdit(i){
+    const questions = getQuestions();
     const q = questions[i];
     editingIndex = i;
     questionText.value = q.text;
@@ -88,6 +122,8 @@
 
   qForm.addEventListener('submit', e=>{
     e.preventDefault();
+    if(!currentBankId) return alert('Select or create a quiz bank first');
+    const questions = getQuestions();
     const q = {
       text: questionText.value.trim(),
       options: [optA.value.trim(), optB.value.trim(), optC.value.trim(), optD.value.trim()],
@@ -101,35 +137,75 @@
   });
 
   clearBtn.addEventListener('click', ()=>{
-    if(!confirm('Clear all questions?')) return;
-    questions = [];
+    if(!currentBankId) return alert('Select a bank first');
+    if(!confirm('Clear all questions in this bank?')) return;
+    banks[currentBankId].questions = [];
     renderList();
   });
 
+  // bank management
+  newBankBtn.addEventListener('click', ()=>{
+    const name = prompt('Enter quiz bank name:');
+    if(!name) return;
+    const id = genId();
+    banks[id] = { name, questions: [] };
+    switchBank(id);
+    saveBanks();
+  });
+
+  renameBankBtn.addEventListener('click', ()=>{
+    if(!currentBankId) return alert('Select a bank first');
+    const newName = prompt('Enter new name:', banks[currentBankId].name);
+    if(!newName) return;
+    banks[currentBankId].name = newName;
+    bankName.value = newName;
+    renderBankSelect();
+    saveBanks();
+  });
+
+  deleteBankBtn.addEventListener('click', ()=>{
+    if(!currentBankId) return alert('Select a bank first');
+    if(!confirm('Delete this bank and all its questions?')) return;
+    delete banks[currentBankId];
+    currentBankId = null;
+    switchBank(null);
+    saveBanks();
+  });
+
+  bankSelect.addEventListener('change', (e)=>{
+    switchBank(e.target.value);
+  });
+
   // persistence
+  function saveBanks(){ localStorage.setItem(BANKS_STORAGE_KEY, JSON.stringify(banks)); }
+  function loadBanks(){ const raw = localStorage.getItem(BANKS_STORAGE_KEY); if(raw) try{ banks = JSON.parse(raw); renderBankSelect(); }catch(e){ } }
+
   saveBtn.addEventListener('click', ()=>{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
+    if(!currentBankId) return alert('Select a bank first');
+    saveBanks();
     alert('Saved to browser storage');
   });
   loadBtn.addEventListener('click', ()=>{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return alert('No saved quiz found');
-    try{ questions = JSON.parse(raw); renderList(); alert('Loaded from browser storage'); }catch(err){ alert('Invalid saved data'); }
+    loadBanks();
+    alert('Loaded from browser storage');
   });
   exportBtn.addEventListener('click', ()=>{
-    const blob = new Blob([JSON.stringify(questions, null, 2)], {type:'application/json'});
+    if(!currentBankId) return alert('Select a bank first');
+    const blob = new Blob([JSON.stringify(banks[currentBankId].questions, null, 2)], {type:'application/json'});
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href=url; a.download='quiz.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    const a = document.createElement('a'); a.href=url; a.download=`${banks[currentBankId].name}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   });
   importBtn.addEventListener('click', ()=>importFile.click());
   importFile.addEventListener('change', ()=>{
+    if(!currentBankId) return alert('Select a bank first');
     const f = importFile.files[0]; if(!f) return; const r = new FileReader(); r.onload = ()=>{
-      try{ const parsed = JSON.parse(r.result); if(!Array.isArray(parsed)) throw new Error('not array'); questions = parsed; renderList(); alert('Imported quiz'); }catch(err){ alert('Failed to import: '+err.message); }
+      try{ const parsed = JSON.parse(r.result); if(!Array.isArray(parsed)) throw new Error('not array'); banks[currentBankId].questions = parsed; renderList(); alert('Imported questions'); }catch(err){ alert('Failed to import: '+err.message); }
     }; r.readAsText(f);
   });
 
   startBtn.addEventListener('click', ()=>{
-    if(questions.length===0) return alert('Add at least one question');
+    const questions = getQuestions();
+    if(questions.length===0) return alert('Add questions to this bank first');
     // prepare playing copy
     playing = deepCopy(questions);
     if(shuffleQuestionsEl.checked) shuffle(playing);
@@ -194,7 +270,7 @@
     const q = playing[state.current];
     feedbackEl.style.display = 'block';
     feedbackEl.innerHTML = `<strong>Time's up</strong><div style="margin-top:6px"><em>Answer:</em> ${q.options[q.correct]||''}</div>` + (q.explanation? `<div style="margin-top:6px"><em>Explanation:</em> ${q.explanation}</div>`:'');
-    // auto next after 2s
+    // auto next after 1.5s
     setTimeout(()=>{ if(state.current < playing.length-1){ state.current++; showQuestion(); } else { showResult(); } }, 1500);
   }
 
@@ -218,7 +294,8 @@
     builder.classList.remove('hidden'); quiz.classList.add('hidden'); result.classList.add('hidden');
   });
 
-  // initial render
+  // init
+  loadBanks();
   renderList();
 
 })();

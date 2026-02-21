@@ -5,10 +5,26 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Quiz Maker</title>
 	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="theme.css">
 </head>
 <body>
 	<div class="container">
 		<h1>Quiz Maker</h1>
+
+		<div style="margin-bottom:20px;padding:12px;background:rgba(255,255,255,0.01);border-radius:8px;border:1px solid rgba(255,255,255,0.03)">
+			<label style="display:block;margin-bottom:8px">Current Quiz Bank:</label>
+			<div style="display:flex;gap:8px;margin-bottom:8px">
+				<input id="bankName" placeholder="Quiz bank name" style="flex:1">
+				<button id="newBankBtn" class="secondary" type="button">New Bank</button>
+			</div>
+			<select id="bankSelect" style="width:100%;margin-bottom:8px">
+				<option value="">-- Select a bank --</option>
+			</select>
+			<div class="row">
+				<button id="renameBankBtn" class="secondary" type="button">Rename Bank</button>
+				<button id="deleteBankBtn" class="secondary" type="button">Delete Bank</button>
+			</div>
+		</div>
 
 		<section id="builder">
 			<h2>Build Quiz</h2>
@@ -20,6 +36,7 @@
 					<input id="optC" placeholder="Option C">
 					<input id="optD" placeholder="Option D">
 				</div>
+				<textarea id="explanation" placeholder="Optional explanation / feedback" rows="2"></textarea>
 				<label>Correct:</label>
 				<select id="correct">
 					<option value="0">A</option>
@@ -33,6 +50,20 @@
 				</div>
 			</form>
 
+			<div class="row">
+				<button id="saveBtn" class="secondary" type="button">Save to browser</button>
+				<button id="loadBtn" class="secondary" type="button">Load from browser</button>
+				<button id="exportBtn" class="secondary" type="button">Export JSON</button>
+				<input id="importFile" type="file" accept="application/json" style="display:none">
+				<button id="importBtn" class="secondary" type="button">Import JSON</button>
+			</div>
+
+			<div class="row">
+				<label style="display:flex;align-items:center;gap:8px"><input id="shuffleQuestions" type="checkbox"> Shuffle questions</label>
+				<label style="display:flex;align-items:center;gap:8px"><input id="shuffleOptions" type="checkbox"> Shuffle options</label>
+				<label style="display:flex;align-items:center;gap:8px">Timer (sec): <input id="timerSec" type="number" min="0" value="0" style="width:80px;margin-left:6px"></label>
+			</div>
+
 			<h3>Questions</h3>
 			<ul id="questionsList" class="list"></ul>
 
@@ -42,7 +73,9 @@
 		<section id="quiz" class="hidden">
 			<h2 id="qIndex"></h2>
 			<div id="qArea" class="card"></div>
+			<div id="timer" class="card" style="display:none;margin-top:10px">Time left: <span id="timerVal"></span>s</div>
 			<ul id="answers" class="list answers"></ul>
+			<div id="feedback" class="card" style="display:none;margin-top:8px"></div>
 			<div class="row">
 				<button id="prevBtn" class="secondary">Prev</button>
 				<button id="nextBtn" class="primary">Next</button>
@@ -53,6 +86,7 @@
 			<h2>Results</h2>
 			<div id="score"></div>
 			<button id="retryBtn">Back to Builder</button>
+			<button id="retryBtn">Back to start</button>
 		</section>
 	</div>
 
